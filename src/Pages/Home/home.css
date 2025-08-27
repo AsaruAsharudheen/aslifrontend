@@ -1,13 +1,13 @@
 /* ===== Container ===== */
 .home-fund-container {
-  max-width: 950px;
+  max-width: 1550px;
   margin: 0 auto;
   padding: 25px;
   font-family: 'Poppins', sans-serif;
   color: #333;
   background: linear-gradient(to bottom right, #fdfbfb, #ebedee);
   border-radius: 20px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  /* box-shadow: 0 10px 25px rgba(0,0,0,0.08); */
 }
 
 /* ===== Category Cards ===== */
