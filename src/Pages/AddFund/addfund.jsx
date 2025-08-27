@@ -3,9 +3,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import "./addfund.css";
 
-// ✅ Use environment variable or fallback to local backend
 const BASE_URL =
-  import.meta.env.VITE_BACKEND_URL || "http://localhost:9999/api/funds";
+  import.meta.env.VITE_BACKEND_URL || "https://aslibackend.onrender.com/api/funds";
 
 const AddFund = () => {
   const [categories, setCategories] = useState([]);
@@ -25,7 +24,6 @@ const AddFund = () => {
   const [expenseAmount, setExpenseAmount] = useState("");
   const [expenseDate, setExpenseDate] = useState("");
 
-  // Fetch categories on load
   useEffect(() => {
     axios
       .get(`${BASE_URL}/categories`)
@@ -58,7 +56,7 @@ const AddFund = () => {
         amount: Number(personAmount),
         date: personDate,
         service: personService.trim(),
-        status: personStatus, // ✅ send status
+        status: personStatus,
       })
       .then((res) => {
         const newPerson = res.data;

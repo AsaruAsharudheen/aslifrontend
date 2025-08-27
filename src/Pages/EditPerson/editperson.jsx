@@ -6,10 +6,10 @@ import Navbar from "../../Components/Navbar/navbar";
 import "./editperson.css";
 
 const BASE_URL =
-  import.meta.env.VITE_BACKEND_URL || "http://localhost:9999/api/funds";
+  import.meta.env.VITE_BACKEND_URL || "https://aslibackend.onrender.com/api/funds";
 
 const EditPerson = () => {
-  const { id } = useParams(); // 👈 must match route param
+  const { id } = useParams();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -20,7 +20,7 @@ const EditPerson = () => {
     date: "",
   });
 
-  // ✅ Fetch person details
+  // Fetch person details
   useEffect(() => {
     if (id) {
       axios
@@ -39,18 +39,18 @@ const EditPerson = () => {
     }
   }, [id]);
 
-  // ✅ Handle input changes
+  // Handle input changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // ✅ Handle update
+  // Handle update
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await axios.put(`${BASE_URL}/persons/${id}`, formData);
       alert("Person updated successfully!");
-      navigate("/");
+      navigate("/"); // Redirect to home or fund page
     } catch (err) {
       console.error("Error updating person:", err);
       alert("Failed to update person.");

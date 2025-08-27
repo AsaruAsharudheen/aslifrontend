@@ -4,14 +4,14 @@ import axios from "axios";
 import "./addperson.css";
 
 const BASE_URL =
-  import.meta.env.VITE_BACKEND_URL || "http://localhost:9999/api/funds";
+  import.meta.env.VITE_BACKEND_URL || "https://aslibackend.onrender.com/api/funds";
 
 const AddPerson = () => {
   const [categories, setCategories] = useState([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState("");
   const [personName, setPersonName] = useState("");
   const [personAmount, setPersonAmount] = useState("");
-  const [personDate, setPersonDate] = useState(""); // ✅ stays empty until user selects
+  const [personDate, setPersonDate] = useState(""); // empty until user selects
   const [personService, setPersonService] = useState("");
   const [personStatus, setPersonStatus] = useState("pending");
 
@@ -31,7 +31,7 @@ const AddPerson = () => {
       .post(`${BASE_URL}/categories/${selectedCategoryId}/persons`, {
         name: personName.trim(),
         amount: Number(personAmount),
-        date: personDate, // ✅ correctly sends selected date
+        date: personDate,
         service: personService.trim(),
         status: personStatus,
       })
@@ -39,7 +39,7 @@ const AddPerson = () => {
         alert("Person added successfully");
         setPersonName("");
         setPersonAmount("");
-        setPersonDate(""); // ✅ reset
+        setPersonDate(""); // reset
         setPersonService("");
         setPersonStatus("pending");
       })
@@ -50,6 +50,7 @@ const AddPerson = () => {
     <div style={{ marginTop: "90px" }} className="addperson-container">
       <h1>Add Person</h1>
 
+      {/* Category Select */}
       <select
         value={selectedCategoryId}
         onChange={(e) => setSelectedCategoryId(e.target.value)}
@@ -62,6 +63,7 @@ const AddPerson = () => {
         ))}
       </select>
 
+      {/* Person Inputs */}
       <input
         type="text"
         placeholder="Person Name"
@@ -75,12 +77,12 @@ const AddPerson = () => {
         onChange={(e) => setPersonAmount(e.target.value)}
       />
 
-      {/* ✅ Date Input */}
+      {/* Date Input */}
       <input
         type="date"
         value={personDate}
         onChange={(e) => setPersonDate(e.target.value)}
-        max={new Date().toISOString().split("T")[0]} // allow only today or past
+        max={new Date().toISOString().split("T")[0]} // only today or past
       />
 
       <input
@@ -90,6 +92,7 @@ const AddPerson = () => {
         onChange={(e) => setPersonService(e.target.value)}
       />
 
+      {/* Status Select */}
       <select
         value={personStatus}
         onChange={(e) => setPersonStatus(e.target.value)}

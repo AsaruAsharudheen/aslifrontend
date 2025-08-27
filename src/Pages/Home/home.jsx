@@ -8,7 +8,7 @@ import Navbar from '../../Components/Navbar/navbar';
 import './home.css';
 
 const BASE_URL =
-  import.meta.env.VITE_BACKEND_URL || 'http://localhost:9999/api/funds';
+  import.meta.env.VITE_BACKEND_URL || 'https://aslibackend.onrender.com/api/funds';
 
 const Fund = () => {
   const navigate = useNavigate();
@@ -55,7 +55,7 @@ const Fund = () => {
   const totalExpenses = filteredExpenses.reduce((sum, e) => sum + (e.amount || 0), 0);
   const balance = totalFund - totalExpenses;
 
-  // ✅ PDF download reflecting filter and removing actions
+  // PDF download reflecting filter and removing actions
   const downloadCategoryPDF = () => {
     if (!selectedCategory) return;
 
@@ -63,7 +63,6 @@ const Fund = () => {
     doc.setFontSize(16);
     doc.text(`Category: ${selectedCategory.name}`, 14, 15);
 
-    // Show filter range in PDF
     if (fromDate || toDate) {
       doc.setFontSize(12);
       const rangeText = `Date Range: ${fromDate || '-'} to ${toDate || '-'}`;
@@ -168,9 +167,7 @@ const Fund = () => {
             {categories.map(cat => (
               <button
                 key={cat._id}
-                className={`category-card ${
-                  selectedCategoryId === cat._id ? 'active' : ''
-                }`}
+                className={`category-card ${selectedCategoryId === cat._id ? 'active' : ''}`}
                 onClick={() => setSelectedCategoryId(cat._id)}
               >
                 <span className="category-icon">📂</span>
@@ -182,10 +179,7 @@ const Fund = () => {
 
         {/* Add Category Button */}
         <div className="fund-header">
-          <button
-            className="add-category-btn"
-            onClick={() => navigate('/addcategory')}
-          >
+          <button className="add-category-btn" onClick={() => navigate('/addcategory')}>
             + Add Category
           </button>
         </div>
@@ -198,17 +192,9 @@ const Fund = () => {
             {/* Date Filter */}
             <div className="filter-section">
               <label>From:</label>
-              <input
-                type="date"
-                value={fromDate}
-                onChange={e => setFromDate(e.target.value)}
-              />
+              <input type="date" value={fromDate} onChange={e => setFromDate(e.target.value)} />
               <label>To:</label>
-              <input
-                type="date"
-                value={toDate}
-                onChange={e => setToDate(e.target.value)}
-              />
+              <input type="date" value={toDate} onChange={e => setToDate(e.target.value)} />
               <button onClick={() => {}}>Apply Filter</button>
             </div>
 
@@ -254,30 +240,15 @@ const Fund = () => {
                       <td>{person.name || '-'}</td>
                       <td>{person.service || '-'}</td>
                       <td>{person.amount?.toLocaleString() || '0'}</td>
-                      <td
-                        style={{
-                          color: person.status === 'paid' ? 'green' : 'red',
-                          fontWeight: 'bold',
-                        }}
-                      >
+                      <td style={{ color: person.status === 'paid' ? 'green' : 'red', fontWeight: 'bold' }}>
                         {person.status || 'pending'}
                       </td>
-                      <td>
-                        {person.date
-                          ? new Date(person.date).toLocaleDateString()
-                          : '-'}
-                      </td>
+                      <td>{person.date ? new Date(person.date).toLocaleDateString() : '-'}</td>
                       <td className="actions-cell">
-                        <button
-                          className="edit-btn"
-                          onClick={() => navigate(`/editperson/${person._id}`)}
-                        >
+                        <button className="edit-btn" onClick={() => navigate(`/editperson/${person._id}`)}>
                           Edit
                         </button>
-                        <button
-                          className="delete-btn"
-                          onClick={() => handleDeletePerson(person._id)}
-                        >
+                        <button className="delete-btn" onClick={() => handleDeletePerson(person._id)}>
                           Delete
                         </button>
                       </td>

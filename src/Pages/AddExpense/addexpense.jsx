@@ -4,7 +4,7 @@ import axios from "axios";
 import "./addexpense.css";
 
 const BASE_URL =
-  import.meta.env.VITE_BACKEND_URL || "http://localhost:9999/api/funds";
+  import.meta.env.VITE_BACKEND_URL || "https://aslibackend.onrender.com/api/funds";
 
 const AddExpense = () => {
   const [categories, setCategories] = useState([]);
@@ -13,6 +13,7 @@ const AddExpense = () => {
   const [expenseAmount, setExpenseAmount] = useState("");
   const [expenseDate, setExpenseDate] = useState("");
 
+  // Fetch categories on mount
   useEffect(() => {
     axios
       .get(`${BASE_URL}/categories`)
@@ -20,6 +21,7 @@ const AddExpense = () => {
       .catch((err) => console.error("Error fetching categories:", err));
   }, []);
 
+  // Add expense handler
   const handleAddExpense = () => {
     if (!expenseCategoryId) return alert("Select category");
     if (!expenseDesc.trim() || !expenseAmount || !expenseDate)
@@ -32,7 +34,7 @@ const AddExpense = () => {
         date: expenseDate,
       })
       .then(() => {
-        alert("Expense added");
+        alert("Expense added successfully");
         setExpenseDesc("");
         setExpenseAmount("");
         setExpenseDate("");

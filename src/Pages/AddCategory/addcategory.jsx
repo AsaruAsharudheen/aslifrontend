@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import "./addcategory.css";
 
 const BASE_URL =
-  import.meta.env.VITE_BACKEND_URL || "http://localhost:9999/api/funds";
+  import.meta.env.VITE_BACKEND_URL || "https://aslibackend.onrender.com/api/funds";
 
 const AddCategory = () => {
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ const AddCategory = () => {
   };
 
   return (
-    <div className="addcategory-container">
+    <div className="addcategory-container" style={{ marginTop: "90px" }}>
       <h1>Add Category</h1>
 
       <input
