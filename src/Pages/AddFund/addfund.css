@@ -1,0 +1,118 @@
+/* ===== Global Container ===== */
+.addfund-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 70px 20px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  font-family: "Poppins", sans-serif;
+}
+
+/* Page Title */
+.addfund-container h1 {
+  text-align: center;
+  margin-bottom: 40px;
+  font-size: 28px;
+  color: #222;
+  font-weight: 600;
+}
+
+/* ===== Section Cards ===== */
+.addfund-container section {
+  background: #f9f9f9;
+  border-radius: 12px;
+  padding: 20px 25px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s ease;
+}
+
+.addfund-container section:hover {
+  transform: translateY(-2px);
+}
+
+.addfund-container section h2 {
+  margin-bottom: 15px;
+  font-size: 20px;
+  color: #333;
+  border-left: 4px solid #4e73df;
+  padding-left: 10px;
+}
+
+/* ===== Inputs & Selects ===== */
+.addfund-container input,
+.addfund-container select {
+  width: 100%;
+  padding: 12px 14px;
+  margin: 8px 0 15px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 15px;
+  transition: border 0.2s ease;
+}
+
+.addfund-container input:focus,
+.addfund-container select:focus {
+  border-color: #4e73df;
+  outline: none;
+}
+
+/* ===== Buttons ===== */
+.addfund-container button {
+  display: inline-block;
+  background: #4e73df;
+  color: #fff;
+  border: none;
+  padding: 12px 20px;
+  font-size: 15px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.addfund-container button:hover {
+  background: #3b5bcc;
+  transform: scale(1.03);
+}
+
+/* ===== Responsive Layout ===== */
+@media (min-width: 768px) {
+  .addfund-container section {
+    padding: 30px;
+  }
+
+  .addfund-container h1 {
+    font-size: 32px;
+  }
+
+  .addfund-container input,
+  .addfund-container select {
+    font-size: 16px;
+  }
+
+  .addfund-container button {
+    font-size: 16px;
+    padding: 12px 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .addfund-container {
+    padding: 20px 15px;
+  }
+
+  .addfund-container h1 {
+    font-size: 22px;
+  }
+
+  .addfund-container section {
+    padding: 18px;
+  }
+
+  .addfund-container input,
+  .addfund-container select,
+  .addfund-container button {
+    font-size: 14px;
+  }
+}

@@ -1,0 +1,96 @@
+/* src/Pages/AddCategory/addcategory.css */
+.addcategory-container {
+  max-width: 500px;
+  margin: 90px auto 0;
+  padding: 25px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  font-family: "Poppins", sans-serif;
+  text-align: center;
+}
+
+.addcategory-container h1 {
+  font-size: 26px;
+  margin-bottom: 20px;
+  color: #333;
+  font-weight: 600;
+}
+
+.addcategory-container input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 18px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+  transition: border 0.3s ease;
+}
+
+.addcategory-container input:focus {
+  border-color: #007bff;
+}
+
+.addcategory-container button {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+  font-weight: 600;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.addcategory-container button:hover {
+  background: #0056b3;
+}
+
+/* ===== Responsive Design ===== */
+@media (max-width: 768px) {
+  .addcategory-container {
+    max-width: 90%;
+    margin: 70px auto 20px;
+    padding: 20px;
+  }
+
+  .addcategory-container h1 {
+    font-size: 22px;
+  }
+
+  .addcategory-container input {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .addcategory-container button {
+    padding: 12px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .addcategory-container {
+    margin: 60px 15px 20px;
+    padding: 18px;
+    border-radius: 10px;
+  }
+
+  .addcategory-container h1 {
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+
+  .addcategory-container input {
+    padding: 9px;
+    font-size: 13px;
+  }
+
+  .addcategory-container button {
+    padding: 11px;
+    font-size: 14px;
+  }
+}
