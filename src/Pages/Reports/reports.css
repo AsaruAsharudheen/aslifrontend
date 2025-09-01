@@ -4,7 +4,7 @@
   margin-top: 40px;
   width: 1400px;
   padding: 60px;
-  font-family: "Poppins", sans-serif;
+  font-family: 'Poppins', sans-serif;
   /* background: #f9f9f9; */
   border-radius: 15px;
   /* box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); */
@@ -19,8 +19,6 @@
   padding-top: 30px;
 }
 
-
-
 .reports-categories li {
   background: linear-gradient(135deg, #6a11cb, #2575fc);
   padding: 5px 20px;
@@ -31,6 +29,7 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   color: white;
   padding: 20px;
+  max-width: 120px;
 }
 
 .reports-categories li:hover,
@@ -55,7 +54,7 @@
   margin-bottom: 20px;
 }
 
-.reports-filter input[type="date"] {
+.reports-filter input[type='date'] {
   padding: 5px 10px;
   border-radius: 8px;
   border: 1px solid #ccc;
@@ -93,9 +92,6 @@
   margin-bottom: 15px;
 }
 
-
-
-
 /* ===== Card Container ===== */
 .report-page-summary {
   background: #ffffff;
@@ -119,5 +115,3 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-
-
