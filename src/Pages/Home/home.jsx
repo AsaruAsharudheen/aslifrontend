@@ -213,7 +213,7 @@ const Fund = () => {
           <div className="chart-wrapper">
             {/* Income Chart */}
             <div
-              style={{ maxWidth: '600px', height: '400px' }}
+              style={{ maxWidth: '500px', height: '400px' }}
               className="chart-section"
             >
               <h2>Monthly Income</h2>
