@@ -243,7 +243,7 @@ const Fund = () => {
             </div>
 
             {/* Expenses Chart */}
-            <div style={{ maxWidth: '700px' }} className="chart-section">
+            <div style={{ maxWidth: '500px' }} className="chart-section">
               <h2>Monthly Expenses</h2>
               <ResponsiveContainer width="100%" height={320}>
                 <BarChart data={monthlyExpenses} barSize={40}>
