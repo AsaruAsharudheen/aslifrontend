@@ -23,7 +23,7 @@ const Category = () => {
     { title: 'Dashboard', icon: <FaHome />, path: '/' },
     { title: 'Categories', icon: <FaHome />, path: '/Category-page' },
     { title: 'Clients', icon: <FaUser />, path: '/clientdetails' },
-  
+
     { title: 'Reports', icon: <FaChartPie />, path: '/reports' },
   ];
   useEffect(() => {
@@ -69,8 +69,6 @@ const Category = () => {
     0
   );
   const balance = totalFund - totalExpenses;
-
-  
 
   const downloadCategoryPDF = () => {
     if (!selectedCategory) return;
@@ -205,7 +203,16 @@ const Category = () => {
           </div>
 
           {/* Add Category Button */}
-       
+          <div className="category-page-fund-header">
+            {' '}
+            <button
+              className="category-page-add-category-btn"
+              onClick={() => navigate('/addcategory')}
+            >
+              {' '}
+              + Add Category{' '}
+            </button>{' '}
+          </div>
 
           {/* Details Section */}
           {selectedCategory && (
