@@ -1,0 +1,121 @@
+.reports-container {
+  /* margin:; */
+  margin-left: 280px;
+  margin-top: 40px;
+  width: 1400px;
+  padding: 60px;
+  font-family: "Poppins", sans-serif;
+  /* background: #f9f9f9; */
+  border-radius: 15px;
+  /* box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1); */
+}
+
+.reports-categories ul {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-top: 30px;
+}
+
+.reports-categories li {
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  color: white;
+  padding: 20px;
+}
+
+.reports-categories li:hover,
+.reports-categories li.active {
+  background: #0d6efd;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.reports-details {
+  margin-top: 30px;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.reports-filter {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.reports-filter input[type="date"] {
+  padding: 5px 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.reports-filter button {
+  padding: 6px 15px;
+  background: #0d6efd;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.reports-filter button:hover {
+  background: #0b5ed7;
+}
+
+.reports-summary table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 30px;
+}
+
+.reports-summary th,
+.reports-summary td {
+  border: 1px solid #dee2e6;
+  padding: 10px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.reports-graph h4 {
+  margin-bottom: 15px;
+}
+
+
+
+
+/* ===== Card Container ===== */
+.report-page-summary {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 25px 30px;
+  margin: 25px auto;
+  width: 95%;
+  max-width: 750px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  animation: fadeInUp 0.6s ease;
+  text-align: center;
+}
+
+/* Title */
+.report-page-summary h3 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 25px;
+  background: linear-gradient(135deg, #0d3b66, #1d6fa3);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+

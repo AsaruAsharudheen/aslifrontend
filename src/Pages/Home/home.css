@@ -1,264 +1,414 @@
-/* ===== Container ===== */
-.home-fund-container {
-  max-width: 1050px;
-  margin: 0 auto;
-  padding: 25px;
+/* ===== Global Reset ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
   font-family: 'Poppins', sans-serif;
-  color: #333;
-  background: linear-gradient(to bottom right, #fdfbfb, #ebedee);
-  border-radius: 20px;
-  /* box-shadow: 0 10px 25px rgba(0,0,0,0.08); */
 }
 
-/* ===== Category Cards ===== */
-.fund-categories {
+.main-home {
   display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
 }
 
-.category-card {
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
-  padding: 15px 20px;
-  cursor: pointer;
+/* ===== Sidebar ===== */
+.sidebar {
+  width: 220px;
+  min-height: 100vh;
+  background-color: #fff;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: fixed;
+}
+
+.sidebar-header {
+  text-align: center;
+  color: #333;
+  font-weight: 700;
+  margin-bottom: 30px;
+}
+
+.sidebar-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: 25px;
+}
+
+.sidebar-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  border: 1px solid rgba(0,0,0,0.05);
+  gap: 15px;
+  padding: 10px 35px;
+  border-radius: 12px;
+  cursor: pointer;
+  color: #555;
   font-weight: 500;
   transition: all 0.3s ease;
-  color: #e9e9e9;
 }
 
-.category-card.active {
-  background: linear-gradient(135deg, #007bff, #0056b3);
-  color: #fff;
-  border-color: #0056b3;
-}
-
-.category-card:hover {
-  transform: translateY(-5px) scale(1.03);
-  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+.sidebar-item:hover {
+  background-color: #0d6efd;
   color: #fff;
 }
 
-.category-icon {
+.sidebar-icon {
+  font-size: 23px;
+}
+
+.sidebar-text {
   font-size: 20px;
 }
 
-/* ===== Buttons ===== */
-button {
-  cursor: pointer;
-  border: none;
-  border-radius: 25px;
-  padding: 10px 18px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-}
-
-/* Gradient Buttons */
-.add-category-btn {
-  background: linear-gradient(135deg, #28a745, #1e7e34);
-  color: white;
-  margin-top: 20px;
-}
-
-.add-category-btn:hover {
-  background: linear-gradient(135deg, #218838, #1c6c2b);
-}
-
-.add-fund-btn {
-  background: linear-gradient(135deg, #007bff, #0056b3);
-  color: white;
-}
-
-.add-fund-btn:hover {
-  background: linear-gradient(135deg, #0056b3, #003d80);
-}
-
-.add-expense-btn {
-  background: linear-gradient(135deg, #dc3545, #a71d2a);
-  color: white;
-}
-
-.add-expense-btn:hover {
-  background: linear-gradient(135deg, #b02a37, #7f1a25);
-}
-
-/* ===== Tables ===== */
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 20px;
-  background: rgba(255,255,255,0.9);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-  border-radius: 15px;
-  overflow: hidden;
-}
-
-th, td {
-  padding: 14px 12px;
-  text-align: center;
-  border-bottom: 1px solid #e2e8f0;
-}
-
-th {
-  background: linear-gradient(135deg, #007bff, #0056b3);
-  color: #fff;
-  font-weight: 600;
-}
-
-.expenses-table th {
-  background: linear-gradient(135deg, #dc3545, #a71d2a);
-}
-
-tbody tr:nth-child(even) {
-  background: rgba(255,255,255,0.6);
-}
-
-tbody tr:hover {
-  background: rgba(0,123,255,0.1);
-  transition: background 0.3s ease;
-}
-
-/* ===== Filter Section ===== */
-.filter-section {
-  margin: 25px 0;
+/* ===== Fund Page ===== */
+.fund-page {
+  margin-left: 240px; /* space for sidebar */
   padding: 20px;
-  background: rgba(255,255,255,0.2);
-  border-radius: 20px;
-  backdrop-filter: blur(10px);
+  width: 100%;
+}
+
+.fund-page h1 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #222;
+}
+
+/* ===== Date Filters ===== */
+.date-filters {
   display: flex;
-  align-items: center;
-  gap: 15px;
+  gap: 20px;
+  margin-bottom: 20px;
   flex-wrap: wrap;
 }
 
-.filter-section input[type="date"] {
-  padding: 10px 12px;
-  border-radius: 12px;
+.date-filters label {
+  font-weight: 600;
+  color: #333;
+}
+
+.date-filters input[type='date'] {
+  margin-left: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
   border: 1px solid #ccc;
   outline: none;
   transition: all 0.3s ease;
 }
 
-.filter-section input[type="date"]:focus {
+.date-filters input[type='date']:focus {
   border-color: #007bff;
-  box-shadow: 0 0 6px rgba(0,123,255,0.25);
+  box-shadow: 0 0 6px rgba(0, 123, 255, 0.25);
 }
 
-.filter-section button {
-  background: linear-gradient(135deg, #007bff, #0056b3);
+/* ===== Summary Cards ===== */
+.summary-cards {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 25px;
+  flex-wrap: wrap;
+}
+
+.card {
+  flex: 1;
+  min-width: 220px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.card h3 {
+  margin-bottom: 10px;
+  font-size: 18px;
+}
+
+.card.income {
+  border-top: 5px solid #28a745;
+}
+
+.card.expense {
+  border-top: 5px solid #dc3545;
+}
+
+.card p {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+/* ===== Chart Section ===== */
+.chart-section {
+  margin-top: 25px;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 16px;
+  width: 800px;
+  box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+.chart-section h2 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: #222;
+  text-align: center;
+}
+
+.recharts-cartesian-axis-tick tspan {
+  font-size: 15px;
+  fill: #444;
+}
+
+/* ===== Transactions Section ===== */
+.transactions-page {
+  max-width: 1050px;
+  margin: 40px ;
+  margin-left: 100px;
+  padding: 25px;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0px 8px 25px rgba(0, 0, 0, 0.08);
+  font-family: 'Inter', sans-serif;
+}
+
+.transactions-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+.transactions-header h2 {
+  font-size: 28px;
+  font-weight: 600;
+  color: #222;
+}
+
+.fund-action-buttons {
+  display: flex;
+  gap: 12px;
+}
+
+.fund-action-buttons button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.add-fund-btn {
+  background: #2ecc71;
   color: white;
-  padding: 10px 18px;
+}
+
+.add-expense-btn {
+  background: #e74c3c;
+  color: white;
+}
+
+.fund-action-buttons button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.tabs button {
+  padding: 8px 18px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  background: #f5f5f5;
+  font-size: 15px;
+  font-weight: 500;
+  color: #444;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.tabs button.active {
+  background: #4a90e2;
+  color: white;
+  border-color: #4a90e2;
+}
+
+.tabs button:hover {
+  background: #4a90e2;
+  color: white;
+}
+
+/* Table */
+.transactions-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  /* border-radius: 12px; */
+  overflow: hidden;
+
+}
+
+.transactions-table thead {
+  background: #f7f9fc;
+}
+
+.transactions-table th,
+.transactions-table td {
+  padding: 14px 18px;
+  text-align: left;
+  font-size: 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.transactions-table th {
+  color: #333;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+}
+
+.transactions-table tr:hover {
+  background: #fafafa;
+}
+
+.transactions-table td {
+  color: #555;
+}
+
+.transactions-table td:first-child {
+  font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .transactions-page {
+    padding: 15px;
+  }
+
+  .transactions-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .transactions-table th,
+  .transactions-table td {
+    font-size: 12px;
+    padding: 10px;
+  }
+
+  .tabs {
+    flex-wrap: wrap;
+  }
+}
+
+/* ===== PDF Export ===== */
+.pdf-export {
+  text-align: right;
+}
+
+.pdf-export button {
+  background: linear-gradient(135deg, #28a745, #1e7e34);
+  color: white;
   border-radius: 25px;
 }
 
-.filter-section button:hover {
-  background: linear-gradient(135deg, #0056b3, #003d80);
-}
-
-/* ===== Edit/Delete Buttons ===== */
-.edit-btn, .delete-btn {
-  border-radius: 12px;
-  padding: 8px 14px;
-  margin: 2px;
-  font-size: 13px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-}
-
-.edit-btn {
-  background: linear-gradient(135deg, #ffc107, #e0a800);
-  color: white;
-}
-
-.edit-btn:hover {
-  background: linear-gradient(135deg, #e0a800, #c69500);
-}
-
-.delete-btn {
-  background: linear-gradient(135deg, #f44336, #d32f2f);
-  color: white;
-}
-
-.delete-btn:hover {
-  background: linear-gradient(135deg, #d32f2f, #a71d2a);
+.pdf-export button:hover {
+  background: linear-gradient(135deg, #218838, #1c6c2b);
 }
 
 /* ===== Responsive Adjustments ===== */
 @media (max-width: 768px) {
-  .home-fund-container { padding: 15px; }
-  .fund-categories { flex-direction: column; }
-  button { width: 100%; margin-bottom: 10px; }
-  th, td { padding: 10px 6px; font-size: 14px; }
+  .fund-page {
+    margin-left: 0;
+  }
+
+  .summary-cards {
+    flex-direction: column;
+  }
+
+  .fund-action-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .tabs {
+    flex-direction: column;
+  }
+
+  .transactions-table th,
+  .transactions-table td {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .pdf-export {
+    text-align: center;
+    margin-top: 10px;
+  }
 }
-/* ===== Edit/Delete Buttons ===== */
-.edit-btn, .delete-btn {
-  border-radius: 12px;
-  padding: 8px 14px;
-  margin: 2px;
-  font-size: 13px;
+/* ===== Charts Row ===== */
+.chart-wrapper {
+  display: flex;
+  justify-content: space-around;
+  /* gap: 90px; */
+  margin: 30px auto;
+  max-width: 1700px;
+}
+
+.chart-wrapper .chart-section {
+  flex: 1;
+  background: #fff;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.06);
+}
+
+.chart-wrapper .chart-section h2 {
+  font-size: 18px;
   font-weight: 600;
-  transition: all 0.3s ease;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+  margin-bottom: 15px;
+  color: #222;
+  text-align: center;
 }
 
-.edit-btn {
-  background: linear-gradient(135deg, #ffc107, #e0a800);
-  color: white;
+.summary-cards {
+  display: flex;
+  gap: 40px;
+  margin: 20px 0;
+  /* justify-content: space-around; */
+  justify-content: center;
+  
 }
 
-.edit-btn:hover {
-  background: linear-gradient(135deg, #e0a800, #c69500);
+.card {
+  flex: 1;
+  padding: 20px;
+  border-radius: 12px;
+  color: #fff;
+  text-align: center;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  max-width: 300px;
 }
 
-.delete-btn {
-  background: linear-gradient(135deg, #f44336, #d32f2f);
-  color: white;
+.card.income {
+  background: linear-gradient(135deg, #34d399, #059669); /* green */
 }
 
-.delete-btn:hover {
-  background: linear-gradient(135deg, #d32f2f, #a71d2a);
+.card.expense {
+  background: linear-gradient(135deg, #f87171, #dc2626); /* red */
 }
 
-/* ===== Hide Buttons on Mobile ===== */
-@media (max-width: 768px) {
-  .edit-btn, .delete-btn {
-    display: none;
-  }
-}
-/* Hide Actions column on mobile */
-@media (max-width: 768px) {
-  /* Hide the header */
-  .persons-table th:last-child,
-  .expenses-table th:last-child {
-    display: none;
-  }
-
-  /* Hide the cells */
-  .persons-table td:last-child,
-  .expenses-table td:last-child {
-    display: none;
-  }
-
-  /* Optional: also hide individual edit/delete buttons */
-  .edit-btn,
-  .delete-btn {
-    display: none;
-  }
-}
-@media (max-width: 768px) {
-  .actions-cell, .actions-header {
-    display: none;
-  }
-}
-
-.fund-action-buttons{
-display: flex;
-gap: 20px;
+.card.balance {
+  background: linear-gradient(135deg, #60a5fa, #2563eb); /* blue */
 }

@@ -1,302 +1,382 @@
-// src/Pages/Fund/Fund.jsx
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import axios from 'axios';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { FaHome, FaCog, FaUser, FaChartPie } from 'react-icons/fa';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from 'recharts';
 import Navbar from '../../Components/Navbar/navbar';
 import './home.css';
 
 const BASE_URL =
-  import.meta.env.VITE_BACKEND_URL || 'https://aslibackend.onrender.com/api/funds';
+  import.meta.env.VITE_BACKEND_URL ||
+  'https://aslibackend.onrender.com/api/funds';
 
 const Fund = () => {
   const navigate = useNavigate();
-  const [categories, setCategories] = useState([]);
-  const [selectedCategoryId, setSelectedCategoryId] = useState('');
-  const [fromDate, setFromDate] = useState('');
-  const [toDate, setToDate] = useState('');
 
+  const [categories, setCategories] = useState([]);
+  const [allTransactions, setAllTransactions] = useState([]);
+  const [summary, setSummary] = useState({ totalIncome: 0, totalExpenses: 0 });
+  const [monthlyExpenses, setMonthlyExpenses] = useState([]);
+  const [monthlyIncome, setMonthlyIncome] = useState([]);
+  const [activeTab, setActiveTab] = useState('all');
+
+  const menuItems = [
+    { title: 'Dashboard', icon: <FaHome />, path: '/' },
+    { title: 'Categories', icon: <FaHome />, path: '/Category-page' },
+    { title: 'Clients', icon: <FaUser />, path: '/clientdetails' },
+   
+    { title: 'Reports', icon: <FaChartPie />, path: '/reports' },
+  ];
+
+  // Fetch categories & build summary + transactions
   useEffect(() => {
-    fetchCategories();
+    const fetchData = async () => {
+      try {
+        const { data } = await axios.get(`${BASE_URL}/categories/details`);
+        setCategories(data);
+
+        // Income transactions
+        const incomeTransactions = data.flatMap(cat =>
+          cat.persons.map(p => ({
+            _id: p._id,
+            type: 'income',
+            name: p.name,
+            description: p.service,
+            amount: p.amount,
+            date: p.date,
+          }))
+        );
+
+        // Expense transactions
+        const expenseTransactions = data.flatMap(cat =>
+          cat.expenses.map(e => ({
+            _id: e._id,
+            type: 'expense',
+            description: e.description,
+            amount: e.amount,
+            date: e.date,
+          }))
+        );
+
+        // Merge & sort
+        const allTx = [...incomeTransactions, ...expenseTransactions].sort(
+          (a, b) => new Date(b.date) - new Date(a.date)
+        );
+        setAllTransactions(allTx);
+
+        // Summary
+        const totalIncome = incomeTransactions.reduce(
+          (sum, p) => sum + p.amount,
+          0
+        );
+        const totalExpenses = expenseTransactions.reduce(
+          (sum, e) => sum + e.amount,
+          0
+        );
+        setSummary({ totalIncome, totalExpenses });
+
+        // Monthly expenses
+        const monthlyExpenseMap = {};
+        expenseTransactions.forEach(e => {
+          const month = new Date(e.date).toLocaleString('default', {
+            month: 'short',
+            year: 'numeric',
+          });
+          monthlyExpenseMap[month] = (monthlyExpenseMap[month] || 0) + e.amount;
+        });
+        setMonthlyExpenses(
+          Object.entries(monthlyExpenseMap).map(([month, total]) => ({
+            month,
+            total,
+          }))
+        );
+
+        // Monthly income
+        const monthlyIncomeMap = {};
+        incomeTransactions.forEach(p => {
+          const month = new Date(p.date).toLocaleString('default', {
+            month: 'short',
+            year: 'numeric',
+          });
+          monthlyIncomeMap[month] = (monthlyIncomeMap[month] || 0) + p.amount;
+        });
+        setMonthlyIncome(
+          Object.entries(monthlyIncomeMap).map(([month, total]) => ({
+            month,
+            total,
+          }))
+        );
+      } catch (err) {
+        console.error('Error fetching data:', err);
+      }
+    };
+
+    fetchData();
   }, []);
 
-  const fetchCategories = () => {
-    axios
-      .get(`${BASE_URL}/categories/details`)
-      .then(res => setCategories(res.data))
-      .catch(err => console.error('Error fetching categories:', err));
-  };
-
-  const selectedCategory =
-    categories.find(c => c._id === selectedCategoryId) || null;
-
-  const filterByDate = (items, dateField) => {
-    return items.filter(item => {
-      if (!item[dateField]) return false;
-      const itemDate = new Date(item[dateField]);
-      const from = fromDate ? new Date(fromDate) : null;
-      const to = toDate ? new Date(toDate) : null;
-      if (from && itemDate < from) return false;
-      if (to && itemDate > to) return false;
-      return true;
-    });
-  };
-
-  const filteredPersons = selectedCategory
-    ? filterByDate(selectedCategory.persons, 'date')
-    : [];
-
-  const filteredExpenses = selectedCategory
-    ? filterByDate(selectedCategory.expenses, 'date')
-    : [];
-
-  const totalFund = filteredPersons.reduce((sum, p) => sum + (p.amount || 0), 0);
-  const totalExpenses = filteredExpenses.reduce((sum, e) => sum + (e.amount || 0), 0);
-  const balance = totalFund - totalExpenses;
-
-  // PDF download reflecting filter and removing actions
-  const downloadCategoryPDF = () => {
-    if (!selectedCategory) return;
-
+  // PDF Export
+  const generatePDF = () => {
     const doc = new jsPDF();
-    doc.setFontSize(16);
-    doc.text(`Category: ${selectedCategory.name}`, 14, 15);
+    doc.text('Funds Report', 14, 15);
 
-    if (fromDate || toDate) {
-      doc.setFontSize(12);
-      const rangeText = `Date Range: ${fromDate || '-'} to ${toDate || '-'}`;
-      doc.text(rangeText, 14, 23);
-    }
-
-    let startY = 30;
-
-    // Summary Table
     autoTable(doc, {
-      startY,
-      head: [['Total Fund', 'Total Expenses', 'Balance']],
-      body: [[
-        totalFund.toLocaleString(),
-        totalExpenses.toLocaleString(),
-        balance.toLocaleString(),
-      ]],
-      theme: 'grid',
-      headStyles: { fillColor: [0, 123, 255], textColor: 255 },
-      styles: { fontSize: 12, cellPadding: 4 },
+      startY: 25,
+      head: [['Total Income (₹)', 'Total Expenses (₹)']],
+      body: [[summary.totalIncome, summary.totalExpenses]],
     });
 
-    startY = doc.lastAutoTable.finalY + 10;
+    autoTable(doc, {
+      startY: doc.lastAutoTable.finalY + 10,
+      head: [['Description', 'Name', 'Amount', 'Date']],
+      body: allTransactions.map(tx => [
+        tx.description || '-',
+        tx.name || '-',
+        tx.type === 'income' ? `+₹${tx.amount}` : `-₹${tx.amount}`,
+        tx.date ? new Date(tx.date).toLocaleDateString() : '-',
+      ]),
+    });
 
-    // Persons Table
-    if (filteredPersons.length > 0) {
-      doc.setFontSize(14);
-      doc.text('Persons', 14, startY);
-      startY += 6;
-
-      autoTable(doc, {
-        startY,
-        head: [['Name', 'Service', 'Amount (₹)', 'Status', 'Date']],
-        body: filteredPersons.map(p => [
-          p.name || '-',
-          p.service || '-',
-          p.amount?.toLocaleString() || '0',
-          p.status || 'pending',
-          p.date ? new Date(p.date).toLocaleDateString() : '-',
-        ]),
-        theme: 'grid',
-        headStyles: { fillColor: [0, 123, 255], textColor: 255 },
-        styles: { fontSize: 10, cellPadding: 3 },
-      });
-
-      startY = doc.lastAutoTable.finalY + 10;
-    }
-
-    // Expenses Table
-    if (filteredExpenses.length > 0) {
-      doc.setFontSize(14);
-      doc.text('Expenses', 14, startY);
-      startY += 6;
-
-      autoTable(doc, {
-        startY,
-        head: [['Description', 'Amount (₹)', 'Date']],
-        body: filteredExpenses.map(e => [
-          e.description || '-',
-          e.amount?.toLocaleString() || '0',
-          e.date ? new Date(e.date).toLocaleDateString() : '-',
-        ]),
-        theme: 'grid',
-        headStyles: { fillColor: [220, 53, 69], textColor: 255 },
-        styles: { fontSize: 10, cellPadding: 3 },
-      });
-    }
-
-    doc.save(`${selectedCategory.name}.pdf`);
+    doc.save('funds_report.pdf');
   };
 
-  const handleDeletePerson = async personId => {
-    if (!window.confirm('Are you sure you want to delete this person?')) return;
-    try {
-      await axios.delete(`${BASE_URL}/persons/${personId}`);
-      fetchCategories();
-    } catch (err) {
-      console.error('Error deleting person:', err);
-      alert('Failed to delete person.');
-    }
-  };
+  // Get filtered transactions based only on tab
+  const filteredTransactions = allTransactions.filter(
+    tx => activeTab === 'all' || tx.type === activeTab
+  );
 
-  const handleDeleteExpense = async expenseId => {
-    if (!window.confirm('Are you sure you want to delete this expense?')) return;
-    try {
-      await axios.delete(`${BASE_URL}/expenses/${expenseId}`);
-      fetchCategories();
-    } catch (err) {
-      console.error('Error deleting expense:', err);
-      alert('Failed to delete expense.');
-    }
-  };
+  // Calculate totals
+  const filteredIncome = allTransactions
+    .filter(tx => tx.type === 'income')
+    .reduce((sum, tx) => sum + tx.amount, 0);
+
+  const filteredExpenses = allTransactions
+    .filter(tx => tx.type === 'expense')
+    .reduce((sum, tx) => sum + tx.amount, 0);
+
+  const filteredBalance = filteredIncome - filteredExpenses;
 
   return (
     <>
       <Navbar />
-      <div style={{ marginTop: '150px' }} className="home-fund-container">
-        {/* Category Selection */}
-        <div className="categories-section">
-          <h2 className="categories-heading">Categories</h2>
-          <div className="fund-categories">
-            {categories.map(cat => (
-              <button
-                key={cat._id}
-                className={`category-card ${selectedCategoryId === cat._id ? 'active' : ''}`}
-                onClick={() => setSelectedCategoryId(cat._id)}
+      <div className="main-home">
+        {/* Sidebar */}
+        <div className="sidebar">
+          <h2 className="sidebar-header">DEXO</h2>
+          <div className="sidebar-menu">
+            {menuItems.map((item, index) => (
+              <NavLink
+                key={index}
+                to={item.path}
+                className={({ isActive }) =>
+                  `sidebar-item ${isActive ? 'active' : ''}`
+                }
               >
-                <span className="category-icon">📂</span>
-                <span className="category-name">{cat.name}</span>
-              </button>
+                <span className="sidebar-icon">{item.icon}</span>
+                <span className="sidebar-text">{item.title}</span>
+              </NavLink>
             ))}
           </div>
         </div>
 
-        {/* Add Category Button */}
-        <div className="fund-header">
-          <button className="add-category-btn" onClick={() => navigate('/addcategory')}>
-            + Add Category
-          </button>
-        </div>
+        {/* Main Content */}
+        <div className="fund-page">
+          <h1>Funds Dashboard</h1>
 
-        {/* Details Section */}
-        {selectedCategory && (
-          <div className="fund-details">
-            <h2>{selectedCategory.name}</h2>
-
-            {/* Date Filter */}
-            <div className="filter-section">
-              <label>From:</label>
-              <input type="date" value={fromDate} onChange={e => setFromDate(e.target.value)} />
-              <label>To:</label>
-              <input type="date" value={toDate} onChange={e => setToDate(e.target.value)} />
-              <button onClick={() => {}}>Apply Filter</button>
+          {/* Summary */}
+          <div style={{ marginTop: '70px' }} className="summary-cards">
+            <div className="card income">
+              <h3>Total Income</h3>
+              <p>₹{filteredIncome}</p>
             </div>
-
-            {/* Summary Table */}
-            <div className="fund-summary top-summary">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Total Fund</th>
-                    <th>Total Expenses</th>
-                    <th>Balance</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>₹{totalFund.toLocaleString()}</td>
-                    <td>₹{totalExpenses.toLocaleString()}</td>
-                    <td>₹{balance.toLocaleString()}</td>
-                  </tr>
-                </tbody>
-              </table>
+            <div className="card expense">
+              <h3>Total Expenses</h3>
+              <p>₹{filteredExpenses}</p>
             </div>
-
-            {/* Persons Table */}
-            <h3>Persons</h3>
-            {filteredPersons.length === 0 ? (
-              <p>No persons found for selected date range.</p>
-            ) : (
-              <table className="persons-table">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Service</th>
-                    <th>Amount (₹)</th>
-                    <th>Status</th>
-                    <th>Date</th>
-                    <th className="actions-header">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredPersons.map(person => (
-                    <tr key={person._id}>
-                      <td>{person.name || '-'}</td>
-                      <td>{person.service || '-'}</td>
-                      <td>{person.amount?.toLocaleString() || '0'}</td>
-                      <td style={{ color: person.status === 'paid' ? 'green' : 'red', fontWeight: 'bold' }}>
-                        {person.status || 'pending'}
-                      </td>
-                      <td>{person.date ? new Date(person.date).toLocaleDateString() : '-'}</td>
-                      <td className="actions-cell">
-                        <button className="edit-btn" onClick={() => navigate(`/editperson/${person._id}`)}>
-                          Edit
-                        </button>
-                        <button className="delete-btn" onClick={() => handleDeletePerson(person._id)}>
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
-
-            {/* Expenses Table */}
-            <h3>Expenses</h3>
-            {filteredExpenses.length === 0 ? (
-              <p>No expenses found for selected date range.</p>
-            ) : (
-              <table className="expenses-table">
-                <thead>
-                  <tr>
-                    <th>Description</th>
-                    <th>Amount (₹)</th>
-                    <th>Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredExpenses.map(expense => (
-                    <tr key={expense._id}>
-                      <td>{expense.description || '-'}</td>
-                      <td>{expense.amount?.toLocaleString() || '0'}</td>
-                      <td>{expense.date ? new Date(expense.date).toLocaleDateString() : '-'}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
-
-            {/* Action Buttons */}
-            <div className="fund-action-buttons">
-              <button className="add-fund-btn" onClick={downloadCategoryPDF}>
-                Download PDF
-              </button>
-              <button className="add-expense-btn" onClick={() => navigate('/addexpense')}>
-                + Add Expense
-              </button>
-              <button className="add-fund-btn" onClick={() => navigate('/addperson')}>
-                + Add Person
-              </button>
+            <div className="card balance">
+              <h3>Total Balance</h3>
+              <p>₹{filteredBalance}</p>
             </div>
           </div>
-        )}
+
+          {/* Charts Row */}
+          <div className="chart-wrapper">
+            {/* Income Chart */}
+            <div
+              style={{ maxWidth: '700px', height: '400px' }}
+              className="chart-section"
+            >
+              <h2>Monthly Income</h2>
+              <ResponsiveContainer width="100%" height={320}>
+                <BarChart data={monthlyIncome} barSize={40}>
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    vertical={false}
+                    stroke="#e5e7eb"
+                  />
+                  <XAxis
+                    dataKey="month"
+                    tick={{ fontSize: 12, fill: '#555' }}
+                  />
+                  <YAxis tick={{ fontSize: 12, fill: '#555' }} />
+                  <Tooltip
+                    contentStyle={{
+                      background: '#fff',
+                      borderRadius: '8px',
+                      border: '1px solid #ddd',
+                      fontSize: '13px',
+                    }}
+                  />
+                  <Bar dataKey="total" fill="#22c55e" radius={[6, 6, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* Expenses Chart */}
+            <div style={{ maxWidth: '700px' }} className="chart-section">
+              <h2>Monthly Expenses</h2>
+              <ResponsiveContainer width="100%" height={320}>
+                <BarChart data={monthlyExpenses} barSize={40}>
+                  <CartesianGrid
+                    strokeDasharray="3 3"
+                    vertical={false}
+                    stroke="#e5e7eb"
+                  />
+                  <XAxis
+                    dataKey="month"
+                    tick={{ fontSize: 12, fill: '#555' }}
+                  />
+                  <YAxis tick={{ fontSize: 12, fill: '#555' }} />
+                  <Tooltip
+                    contentStyle={{
+                      background: '#fff',
+                      borderRadius: '8px',
+                      border: '1px solid #ddd',
+                      fontSize: '13px',
+                    }}
+                  />
+                  <Bar dataKey="total" fill="#ef4444" radius={[6, 6, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+
+          {/* Transactions Section */}
+          <div style={{ marginTop: '120px' }} className="transactions-page">
+            <div className="transactions-header">
+              <h2>Transactions</h2>
+              <div className="fund-action-buttons">
+                <button
+                  onClick={() => navigate('/addperson')}
+                  className="add-fund-btn"
+                >
+                  + Add Income
+                </button>
+                <button
+                  onClick={() => navigate('/addexpense')}
+                  className="add-expense-btn"
+                >
+                  + Add Expense
+                </button>
+              </div>
+            </div>
+
+            {/* Tabs */}
+            <div className="tabs">
+              {['all', 'income', 'expense'].map(tab => (
+                <button
+                  key={tab}
+                  className={activeTab === tab ? 'active' : ''}
+                  onClick={() => setActiveTab(tab)}
+                >
+                  {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                </button>
+              ))}
+            </div>
+
+            {/* Table */}
+            <table className="transactions-table">
+              <thead>
+                <tr>
+                  {activeTab === 'income' ? (
+                    <>
+                      <th>Name</th>
+                      <th>Amount (₹)</th>
+                      <th>Date</th>
+                    </>
+                  ) : activeTab === 'expense' ? (
+                    <>
+                      <th>Description</th>
+                      <th>Amount (₹)</th>
+                      <th>Date</th>
+                    </>
+                  ) : (
+                    <>
+                      <th>Description</th>
+                      <th>Name</th>
+                      <th>Amount (₹)</th>
+                      <th>Date</th>
+                    </>
+                  )}
+                </tr>
+              </thead>
+              <tbody>
+                {filteredTransactions.map(tx => (
+                  <tr key={tx._id}>
+                    {activeTab === 'income' ? (
+                      <>
+                        <td>{tx.name}</td>
+                        <td style={{ color: 'green', fontWeight: 'bold' }}>
+                          +₹{tx.amount}
+                        </td>
+                        <td>{new Date(tx.date).toLocaleDateString()}</td>
+                      </>
+                    ) : activeTab === 'expense' ? (
+                      <>
+                        <td>{tx.description}</td>
+                        <td style={{ color: 'red', fontWeight: 'bold' }}>
+                          -₹{tx.amount}
+                        </td>
+                        <td>{new Date(tx.date).toLocaleDateString()}</td>
+                      </>
+                    ) : (
+                      <>
+                        <td>{tx.description}</td>
+                        <td>{tx.name || '-'}</td>
+                        <td
+                          style={{
+                            color: tx.type === 'income' ? 'green' : 'red',
+                            fontWeight: 'bold',
+                          }}
+                        >
+                          {tx.type === 'income'
+                            ? `+₹${tx.amount}`
+                            : `-₹${tx.amount}`}
+                        </td>
+                        <td>{new Date(tx.date).toLocaleDateString()}</td>
+                      </>
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Export */}
+          <div className="pdf-export">
+            <button onClick={generatePDF}>Export as PDF</button>
+          </div>
+        </div>
       </div>
     </>
   );
