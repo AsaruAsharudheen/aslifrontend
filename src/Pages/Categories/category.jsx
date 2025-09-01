@@ -205,14 +205,7 @@ const Category = () => {
           </div>
 
           {/* Add Category Button */}
-          <div className="category-page-fund-header">
-            <button
-              className="category-page-add-category-btn"
-              onClick={() => navigate('/addcategory')}
-            >
-              + Add Category
-            </button>
-          </div>
+       
 
           {/* Details Section */}
           {selectedCategory && (

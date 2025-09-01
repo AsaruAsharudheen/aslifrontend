@@ -9,11 +9,12 @@ import EditPerson from './Pages/EditPerson/editperson';
 import Client from './Pages/Client/person';
 import Category from './Pages/Categories/category';
 import Reports from './Pages/Reports/reports';
+import Login from './Pages/Login/login';
 const App = () => {
   return (
     <>
       <Routes>
-        <Route path="/" element={<Fund />} />
+        <Route path="/home" element={<Fund />} />
         <Route path="/addfund" element={<AddFund />} />
         <Route path="/Category-page" element={<Category />} />
         <Route path="/addexpense" element={<AddExpense />} />
@@ -22,6 +23,7 @@ const App = () => {
         <Route path="/editperson/:id" element={<EditPerson />} />
         <Route path="/clientdetails" element={<Client />} />
         <Route path="/reports" element={<Reports />} />
+        <Route path="/" element={<Login />} />
       </Routes>
     </>
   );

@@ -2,6 +2,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import "./addperson.css";
+import { FaHome, FaCog, FaUser, FaChartPie } from 'react-icons/fa';
+import { NavLink } from 'react-router-dom';
 
 const BASE_URL =
   import.meta.env.VITE_BACKEND_URL || "https://aslibackend.onrender.com/api/funds";
@@ -15,6 +17,13 @@ const AddPerson = () => {
   const [personService, setPersonService] = useState("");
   const [personStatus, setPersonStatus] = useState("pending");
 
+  const menuItems = [
+      { title: 'Dashboard', icon: <FaHome />, path: '/' },
+      { title: 'Categories', icon: <FaHome />, path: '/Category-page' },
+      { title: 'Clients', icon: <FaUser />, path: '/clientdetails' },
+    
+      { title: 'Reports', icon: <FaChartPie />, path: '/reports' },
+    ];
   useEffect(() => {
     axios
       .get(`${BASE_URL}/categories`)
@@ -46,7 +55,26 @@ const AddPerson = () => {
       .catch(() => alert("Failed to add person"));
   };
 
-  return (
+  return <>
+    <div className="main-home">
+        {/* Sidebar */}
+        <div className="sidebar">
+          <h2 className="sidebar-header">DEXO</h2>
+          <div className="sidebar-menu">
+            {menuItems.map((item, index) => (
+              <NavLink
+                key={index}
+                to={item.path}
+                className={({ isActive }) =>
+                  `sidebar-item ${isActive ? 'active' : ''}`
+                }
+              >
+                <span className="sidebar-icon">{item.icon}</span>
+                <span className="sidebar-text">{item.title}</span>
+              </NavLink>
+            ))}
+          </div>
+        </div>
     <div style={{ marginTop: "90px" }} className="addperson-container">
       <h1>Add Person</h1>
 
@@ -103,7 +131,9 @@ const AddPerson = () => {
 
       <button onClick={handleAddPerson}>Add Person</button>
     </div>
-  );
+    </div>
+    </>
+  
 };
 
 export default AddPerson;
