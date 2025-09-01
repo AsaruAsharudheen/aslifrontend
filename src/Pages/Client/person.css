@@ -29,19 +29,18 @@
   justify-content: center;
 }
 
-
 .category-card {
- background: linear-gradient(135deg, #6a11cb, #2575fc);
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
   color: #fff;
   padding: 20px 20px;
   border-radius: 18px;
-  font-size: 1.05rem;
+  font-size: 17px;
   font-weight: 500;
   cursor: pointer;
   text-align: center;
   transition: all 0.3s ease;
   /* box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25); */
-  min-width: 150px;
+  width: 110px;
   border: none;
   margin-top: 10px;
 }
@@ -49,7 +48,7 @@
 .category-card:hover {
   transform: translateY(-8px) scale(1.02);
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35),
-              0 0 12px rgba(255, 255, 255, 0.08);
+    0 0 12px rgba(255, 255, 255, 0.08);
 }
 
 /* ===================== */
@@ -113,7 +112,7 @@
   font-size: 0.85rem;
   font-weight: 600;
   color: #fff;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
   transition: all 0.3s ease;
   width: 110px;
   text-align: center;
@@ -136,7 +135,7 @@
 /* Back Button */
 /* ===================== */
 .back-btn {
-  background:rgb(47, 200, 54);
+  background: rgb(47, 200, 54);
   border: none;
   padding: 12px 20px;
   border-radius: 12px;
@@ -145,12 +144,12 @@
   font-weight: 600;
   /* margin-top: 30px; */
   transition: all 0.3s ease;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   color: rgb(255, 255, 255);
 }
 
 .back-btn:hover {
-  background:rgb(0, 0, 0);
+  background: rgb(0, 0, 0);
   transform: translateY(-3px);
 }
 
@@ -177,8 +176,12 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /* ===================== */
@@ -196,15 +199,21 @@
   width: 90%;
   max-width: 520px;
   position: relative;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
   border: 1px solid rgba(255, 255, 255, 0.3);
   animation: slideUp 0.45s cubic-bezier(0.25, 0.8, 0.25, 1);
   text-align: center;
 }
 
 @keyframes slideUp {
-  from { transform: translateY(80px) scale(0.95); opacity: 0; }
-  to   { transform: translateY(0) scale(1); opacity: 1; }
+  from {
+    transform: translateY(80px) scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
 }
 
 /* ===================== */
@@ -277,8 +286,6 @@
   transform: rotate(90deg) scale(1.15);
 }
 
-
-
 /* ==== Add Person Button ==== */
 .add-btn {
   display: inline-flex;
@@ -306,8 +313,6 @@
 .add-btn:active {
   transform: scale(0.96);
 }
-
-
 
 .list-header h2 {
   font-size: 26px;
@@ -339,27 +344,6 @@
   color: #ffdf40;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* ===== Sidebar Container ===== */
 .sidebar {
   width: 190px;
@@ -371,7 +355,7 @@
   flex-direction: column;
   gap: 30px;
   font-family: 'Poppins', sans-serif;
-  box-shadow: 3px 0 15px rgba(0,0,0,0.2);
+  box-shadow: 3px 0 15px rgba(0, 0, 0, 0.2);
   z-index: 1000;
 }
 
@@ -413,7 +397,7 @@
 .sidebar-item.active {
   background: linear-gradient(135deg, #007bff, #00c6ff);
   color: #fff;
-  box-shadow: 0 4px 12px rgba(0,123,255,0.4);
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
 }
 
 /* Sidebar Icon */
@@ -444,8 +428,7 @@
   }
 }
 
-
-.actions{
+.actions {
   /* background-color: #0d3b66; */
   width: 1500px;
   display: flex;
