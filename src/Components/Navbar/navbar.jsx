@@ -6,7 +6,7 @@ const Navbar = () => {
   return (
     <div className="navbar">
       <div className="logo-section">
-        <h1 style={{paddingLeft:'260px'}} className="logo">AccountsDetails</h1>
+        <h1 style={{paddingLeft:'210px'}} className="logo">AccountsDetails</h1>
         <div className="icons">
           <FaTelegramPlane className="nav-icon" title="Telegram" />
           <FaCog className="nav-icon" title="Settings" />
